@@ -1,0 +1,29 @@
+* {
+  font-family: sans-serif;
+}
+.image {
+  width: 10%;
+}
+.navbar {
+  width: 90%;
+  margin: 10px auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+ul {
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+li {
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+span {
+  transform: rotate(90deg);
+  font-family: sans-serif;
+}
