@@ -1,6 +1,6 @@
 import Button from "./components/Button";
 import Card from "./components/Card";
-import avatar from "./img/DastKatiQarama.png";
+import avatar from "./img/DastKatiQalama.png";
 const App = () => {
   const Student = [
     { id: 1, name: "Khurshed" },
