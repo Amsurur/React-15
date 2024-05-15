@@ -1,29 +1,28 @@
-import "./App.css";
-import image from "./img/images.png";
-import phone from "./img/phone.png";
-import burger from "./img/burger.svg";
+import Button from "./components/Button";
+import Card from "./components/Card";
+import avatar from "./img/DastKatiQarama.png";
 const App = () => {
+  const Student = [
+    { id: 1, name: "Khurshed" },
+    { id: 2, name: "Nurmuhammad" },
+    { id: 3, name: "Parviz" },
+    { id: 4, name: "Ziyo" },
+  ];
+
+  console.log(1);
+
   return (
-    <div>
-      <nav className="navbar">
-        <img className="image" src={image} alt="" />
-        <ul>
-          <li>Наша продукция</li>
-          <li>Услуги</li>
-          <li>Контакты</li>
-          <li>
-            <img src={phone} alt="" />
-            +7 (812) 904-02-55
-          </li>
-          <li>Заказать звонок</li>
-          <li>
-            {" "}
-            <img src={burger} alt="" />
-            <span>Меню</span>
-          </li>
-        </ul>
-      </nav>
-      <div></div>
+    <div className="flex justify-evenly text-center gap-5 p-2">
+      {Student.map((student, i) => {
+        return (
+          <div key={i}>
+            <p>{student.id}</p>
+            <p>{student.name}</p>
+          </div>
+        );
+      })}
+      <Button text={"rerer"} />
+      <Card text="Khurshed" avatar={avatar} />
     </div>
   );
 };
