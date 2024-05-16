@@ -1,9 +1,8 @@
 // eslint-disable-next-line react/prop-types
-const Card = ({ text, avatar }) => {
+const Card = ({ name, bg }) => {
   return (
-    <div>
-      <img src={avatar} alt="" />
-      <p>{text}</p>
+    <div style={{ backgroundColor: bg }}>
+      <p>{name}</p>
     </div>
   );
 };

@@ -3,10 +3,10 @@ import Card from "./components/Card";
 import avatar from "./img/DastKatiQalama.png";
 const App = () => {
   const Student = [
-    { id: 1, name: "Khurshed" },
-    { id: 2, name: "Nurmuhammad" },
-    { id: 3, name: "Parviz" },
-    { id: 4, name: "Ziyo" },
+    { id: 1, name: "Khurshed", bg: "red", imageBg: "black", image: avatar },
+    { id: 2, name: "Nurmuhammad", bg: "purple" },
+    { id: 3, name: "Parviz", bg: "green" },
+    { id: 4, name: "Ziyo", bg: "blue" },
   ];
 
   console.log(1);
@@ -14,15 +14,8 @@ const App = () => {
   return (
     <div className="flex justify-evenly text-center gap-5 p-2">
       {Student.map((student, i) => {
-        return (
-          <div key={i}>
-            <p>{student.id}</p>
-            <p>{student.name}</p>
-          </div>
-        );
+        return <Card key={i} name={student.name} bg={student.bg} />;
       })}
-      <Button text={"rerer"} />
-      <Card text="Khurshed" avatar={avatar} />
     </div>
   );
 };
