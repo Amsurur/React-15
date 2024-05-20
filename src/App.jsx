@@ -23,7 +23,12 @@ const App = () => {
     },
   ]);
   const [name, setName] = useState("");
-  const [age, setAge] = useState();
+  const [age, setAge] = useState("");
+  const [editName, setEditName] = useState("");
+  const [editAge, setEditAge] = useState();
+  const [open, setOpen] = useState(false);
+  const [idx, setIdx] = useState(null);
+
   function names(params) {
     setName(params.target.value);
   }
@@ -33,9 +38,42 @@ const App = () => {
       name: name,
       age: age,
     };
-    setData([...data, NewUser]);
-    setName("");
-    setAge("");
+    if (name.trim().length == 0 && age.trim().length == 0) {
+      alert(" u r bot");
+    } else {
+      setData([...data, NewUser]);
+      setName("");
+      setAge("");
+    }
+  };
+  const RemoveData = (id) => {
+    setData(
+      data.filter((e) => {
+        return e.id !== id;
+      })
+    );
+  };
+  const editUser = (el) => {
+    setOpen(true);
+    setEditName(el.name);
+    setEditAge(el.age);
+    setIdx(el.id);
+  };
+  const editData = () => {
+    let newUser = {
+      id: idx,
+      name: editName,
+      age: editAge,
+    };
+    setData(
+      data.map((e) => {
+        if (e.id === idx) {
+          e = newUser;
+        }
+        return e;
+      })
+    );
+    setOpen(false);
   };
   return (
     <div>
@@ -48,14 +86,33 @@ const App = () => {
         />
         <button onClick={() => AddData()}>add +</button>
       </div>
-      {data.map((e, i) => {
+      {data.map((el, i) => {
         return (
           <div className="flex gap-5" key={i}>
-            <h1>{e.name}</h1>
-            <p>{e.age}</p>
+            <h1>{el.name}</h1>
+            <p>{el.age}</p>
+            <button onClick={() => RemoveData(el.id)}>delete</button>
+            <button onClick={() => editUser(el)}>edit</button>
           </div>
         );
       })}
+      {open ? (
+        <div className="flex">
+          <input
+            value={editName}
+            onChange={(e) => setEditName(e.target.value)}
+            className="border"
+            type="text"
+          />
+          <input
+            value={editAge}
+            onChange={(e) => setEditAge(e.target.value)}
+            className="border"
+            type="text"
+          />
+          <button onClick={() => editData()}>save</button>
+        </div>
+      ) : null}
     </div>
   );
 };
