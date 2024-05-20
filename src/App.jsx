@@ -1,20 +1,60 @@
-import Button from "./components/Button";
-import Card from "./components/Card";
-import avatar from "./img/DastKatiQalama.png";
+import { useState } from "react";
 const App = () => {
-  const Student = [
-    { id: 1, name: "Khurshed", bg: "red", imageBg: "black", image: avatar },
-    { id: 2, name: "Nurmuhammad", bg: "purple" },
-    { id: 3, name: "Parviz", bg: "green" },
-    { id: 4, name: "Ziyo", bg: "blue" },
-  ];
-
-  console.log(1);
-
+  const [data, setData] = useState([
+    {
+      id: 1,
+      name: "Nurmuhammad",
+      age: 17,
+    },
+    {
+      id: 2,
+      name: "Khurshed",
+      age: 11 + 6,
+    },
+    {
+      id: 3,
+      name: "Ziyo",
+      age: 16,
+    },
+    {
+      id: 4,
+      name: "Parviz",
+      age: 18,
+    },
+  ]);
+  const [name, setName] = useState("");
+  const [age, setAge] = useState();
+  function names(params) {
+    setName(params.target.value);
+  }
+  const AddData = () => {
+    let NewUser = {
+      id: Date.now(),
+      name: name,
+      age: age,
+    };
+    setData([...data, NewUser]);
+    setName("");
+    setAge("");
+  };
   return (
-    <div className="flex justify-evenly text-center gap-5 p-2">
-      {Student.map((student, i) => {
-        return <Card key={i} name={student.name} bg={student.bg} />;
+    <div>
+      <div>
+        <input value={name} onChange={(e) => names(e)} type="text" />
+        <input
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+          type="text"
+        />
+        <button onClick={() => AddData()}>add +</button>
+      </div>
+      {data.map((e, i) => {
+        return (
+          <div className="flex gap-5" key={i}>
+            <h1>{e.name}</h1>
+            <p>{e.age}</p>
+          </div>
+        );
       })}
     </div>
   );
