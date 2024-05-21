@@ -1,4 +1,5 @@
 import { useState } from "react";
+import MediaCard from "./components/MediaCard";
 const App = () => {
   const [data, setData] = useState([
     {
@@ -86,16 +87,16 @@ const App = () => {
         />
         <button onClick={() => AddData()}>add +</button>
       </div>
-      {data.map((el, i) => {
-        return (
-          <div className="flex gap-5" key={i}>
-            <h1>{el.name}</h1>
-            <p>{el.age}</p>
-            <button onClick={() => RemoveData(el.id)}>delete</button>
-            <button onClick={() => editUser(el)}>edit</button>
-          </div>
-        );
-      })}
+      <div className="flex gap-10 my-10 justify-center">
+        {data.map((el, i) => {
+          return (
+            <div className="flex gap-5" key={i}>
+              <MediaCard name={el.name} age={el.age} />
+            </div>
+          );
+        })}
+      </div>
+
       {open ? (
         <div className="flex">
           <input
