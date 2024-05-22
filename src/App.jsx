@@ -1,119 +1,154 @@
+import { useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import { Button, TextField } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import { useState } from "react";
-import MediaCard from "./components/MediaCard";
+import Sort from "./components/Sort";
+
 const App = () => {
+  const [open, setOpen] = useState(false);
   const [data, setData] = useState([
     {
       id: 1,
-      name: "Nurmuhammad",
-      age: 17,
+      title: "Hello",
+      desc: "Hello from the server bd",
+      status: "false",
     },
     {
       id: 2,
-      name: "Khurshed",
-      age: 11 + 6,
+      title: "Hello Addons",
+      desc: "Hello from the server bd and add   some",
+      status: "true",
     },
     {
       id: 3,
-      name: "Ziyo",
-      age: 16,
-    },
-    {
-      id: 4,
-      name: "Parviz",
-      age: 18,
+      title: "Buy Addons with",
+      desc: "Hello from the server bd and add some",
+      status: "false",
     },
   ]);
-  const [name, setName] = useState("");
+  const [sortData, setSortData] = useState(data);
+  const [AddTitle, setAddTitle] = useState("");
+  const [AddDesc, setAddDesc] = useState("");
   const [age, setAge] = useState("");
-  const [editName, setEditName] = useState("");
-  const [editAge, setEditAge] = useState();
-  const [open, setOpen] = useState(false);
-  const [idx, setIdx] = useState(null);
+  const [search, setSearch] = useState("");
 
-  function names(params) {
-    setName(params.target.value);
-  }
-  const AddData = () => {
-    let NewUser = {
-      id: Date.now(),
-      name: name,
-      age: age,
-    };
-    if (name.trim().length == 0 && age.trim().length == 0) {
-      alert(" u r bot");
-    } else {
-      setData([...data, NewUser]);
-      setName("");
-      setAge("");
-    }
-  };
-  const RemoveData = (id) => {
-    setData(
-      data.filter((e) => {
-        return e.id !== id;
-      })
-    );
-  };
-  const editUser = (el) => {
+  const handleClickOpen = () => {
     setOpen(true);
-    setEditName(el.name);
-    setEditAge(el.age);
-    setIdx(el.id);
   };
-  const editData = () => {
-    let newUser = {
-      id: idx,
-      name: editName,
-      age: editAge,
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const handleAddUser = () => {
+    let user = {
+      id: Date.now(),
+      title: AddTitle,
+      desc: AddDesc,
     };
-    setData(
-      data.map((e) => {
-        if (e.id === idx) {
-          e = newUser;
+    setData([...data, user]);
+    handleClose();
+  };
+
+  const handleChange = (event) => {
+    setAge(event.target.value);
+    setSortData(
+      data.filter((e) => {
+        if (event.target.value === e.status) {
+          return e;
         }
-        return e;
+        if (event.target.value === "All") {
+          return e;
+        }
       })
     );
-    setOpen(false);
+  };
+  const Search = (event) => {
+    setSearch(event.target.value);
+    setSortData(
+      data.filter((e) => {
+        if (
+          e.title
+            .toLowerCase()
+            .includes(event.target.value.toLowerCase().trim())
+        ) {
+          return e;
+        }
+      })
+    );
   };
   return (
     <div>
-      <div>
-        <input value={name} onChange={(e) => names(e)} type="text" />
-        <input
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-          type="text"
-        />
-        <button onClick={() => AddData()}>add +</button>
-      </div>
-      <div className="flex gap-10 my-10 justify-center">
-        {data.map((el, i) => {
-          return (
-            <div className="flex gap-5" key={i}>
-              <MediaCard name={el.name} age={el.age} />
-            </div>
-          );
-        })}
-      </div>
+      <Box sx={{ width: "10%", marginY: "10px" }}>
+        <Sort handleChange={handleChange} age={age} />
+        <Search search={search} Search={Search} />
+      </Box>
 
-      {open ? (
-        <div className="flex">
-          <input
-            value={editName}
-            onChange={(e) => setEditName(e.target.value)}
-            className="border"
-            type="text"
+      <Box sx={{ display: "flex" }}>
+        <Button
+          onClick={handleClickOpen}
+          endIcon={<AddIcon />}
+          variant="outlined"
+        >
+          Add
+        </Button>
+      </Box>
+      {sortData.map((e, i) => {
+        return (
+          <Card key={i} sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <CardContent sx={{ flex: "1 0 auto" }}>
+                <Typography component="div" variant="h5">
+                  {e.title}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  color="text.secondary"
+                  component="div"
+                >
+                  {e.desc}
+                </Typography>
+                <Typography>{e.status}</Typography>
+              </CardContent>
+            </Box>
+          </Card>
+        );
+      })}
+
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Use Google's location service?"}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            value={AddTitle}
+            onChange={(e) => setAddTitle(e.target.value)}
           />
-          <input
-            value={editAge}
-            onChange={(e) => setEditAge(e.target.value)}
-            className="border"
-            type="text"
+          <TextField
+            value={AddDesc}
+            onChange={(e) => setAddDesc(e.target.value)}
           />
-          <button onClick={() => editData()}>save</button>
-        </div>
-      ) : null}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={handleAddUser} autoFocus>
+            Add
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
