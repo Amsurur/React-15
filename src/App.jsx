@@ -1,154 +1,154 @@
-import { useTheme } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
-import { Button, TextField } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import { Checkbox, Input, Modal, Space, Table, Tag } from "antd";
 import { useState } from "react";
-import Sort from "./components/Sort";
-
+const { Column, ColumnGroup } = Table;
 const App = () => {
-  const [open, setOpen] = useState(false);
   const [data, setData] = useState([
     {
-      id: 1,
-      title: "Hello",
-      desc: "Hello from the server bd",
+      key: "1",
+      firstName: "John",
+      lastName: "Brown",
+      age: 32,
+      address: "New York No. 1 Lake Park",
       status: "false",
+      tags: ["nice", "developer"],
     },
     {
-      id: 2,
-      title: "Hello Addons",
-      desc: "Hello from the server bd and add   some",
+      key: "2",
+      firstName: "Jim",
+      lastName: "Green",
+      age: 42,
+      status: "false",
+      address: "London No. 1 Lake Park",
+      tags: ["loser"],
+    },
+    {
+      key: "3",
+      firstName: "Joe",
+      lastName: "Black",
+      age: 32,
       status: "true",
-    },
-    {
-      id: 3,
-      title: "Buy Addons with",
-      desc: "Hello from the server bd and add some",
-      status: "false",
+      address: "Sydney No. 1 Lake Park",
+      tags: ["cool", "teacher"],
     },
   ]);
-  const [sortData, setSortData] = useState(data);
-  const [AddTitle, setAddTitle] = useState("");
-  const [AddDesc, setAddDesc] = useState("");
-  const [age, setAge] = useState("");
-  const [search, setSearch] = useState("");
+  const [open, setOpen] = useState(false);
+  const [editFirstName, setEditFirstName] = useState("");
+  const [editLastName, setEditLastName] = useState("");
+  const [idx, setIdx] = useState("");
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleAddUser = () => {
+  const handleOk = (e) => {
     let user = {
-      id: Date.now(),
-      title: AddTitle,
-      desc: AddDesc,
+      key: idx,
+      firstName: editFirstName,
+      lastName: editLastName,
+      age: 32,
+      address: "New York No. 1 Lake Park",
+      tags: ["nice", "developer"],
     };
-    setData([...data, user]);
-    handleClose();
-  };
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-    setSortData(
-      data.filter((e) => {
-        if (event.target.value === e.status) {
-          return e;
+    setData(
+      data.map((e) => {
+        if (e.key === idx) {
+          e = user;
         }
-        if (event.target.value === "All") {
-          return e;
-        }
+        return e;
       })
     );
+
+    console.log(e);
+    setConfirmLoading(true);
+
+    setTimeout(() => {
+      setOpen(false);
+      setConfirmLoading(false);
+    }, 2000);
   };
-  const Search = (event) => {
-    setSearch(event.target.value);
-    setSortData(
-      data.filter((e) => {
-        if (
-          e.title
-            .toLowerCase()
-            .includes(event.target.value.toLowerCase().trim())
-        ) {
-          return e;
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const handleCancel = () => {
+    console.log("Clicked cancel button");
+    setOpen(false);
+  };
+  const handleOpenModal = (e) => {
+    console.log(e);
+    setOpen(true);
+    setEditFirstName(e.firstName);
+    setEditLastName(e.lastName);
+    setIdx(e.key);
+  };
+  const onChange = (e, id) => {
+    setData(
+      data.map((e) => {
+        if (e.key === id) {
+          e.status = e.status === "true" ? "false" : "true";
         }
+        return e;
       })
     );
   };
   return (
     <div>
-      <Box sx={{ width: "10%", marginY: "10px" }}>
-        <Sort handleChange={handleChange} age={age} />
-        <Search search={search} Search={Search} />
-      </Box>
-
-      <Box sx={{ display: "flex" }}>
-        <Button
-          onClick={handleClickOpen}
-          endIcon={<AddIcon />}
-          variant="outlined"
-        >
-          Add
-        </Button>
-      </Box>
-      {sortData.map((e, i) => {
-        return (
-          <Card key={i} sx={{ display: "flex" }}>
-            <Box sx={{ display: "flex", flexDirection: "column" }}>
-              <CardContent sx={{ flex: "1 0 auto" }}>
-                <Typography component="div" variant="h5">
-                  {e.title}
-                </Typography>
-                <Typography
-                  variant="subtitle1"
-                  color="text.secondary"
-                  component="div"
-                >
-                  {e.desc}
-                </Typography>
-                <Typography>{e.status}</Typography>
-              </CardContent>
-            </Box>
-          </Card>
-        );
-      })}
-
-      <Dialog
+      <Table dataSource={data}>
+        <ColumnGroup title="Name">
+          <Column title="First Name" dataIndex="firstName" key="firstName" />
+          <Column title="Last Name" dataIndex="lastName" key="lastName" />
+        </ColumnGroup>
+        <Column title="Age" dataIndex="age" key="age" />
+        <Column title="Address" dataIndex="address" key="address" />
+        <Column title="Status" dataIndex="status" key="status" />
+        <Column
+          title="Tags"
+          dataIndex="tags"
+          key="tags"
+          render={(tags) => (
+            <>
+              {tags.map((tag) => {
+                let color = tag.length > 5 ? "geekblue" : "green";
+                if (tag === "loser") {
+                  color = "volcano";
+                }
+                return (
+                  <Tag color={color} key={tag}>
+                    {tag.toUpperCase()}
+                  </Tag>
+                );
+              })}
+            </>
+          )}
+        />
+        <Column
+          title="Action"
+          key="action"
+          render={(_, record) => (
+            <Space size="middle">
+              <button onClick={() => handleOpenModal(record)}>edit</button>
+              <a>Delete</a>
+              <Checkbox
+                checked={record.status === "true" ? true : false}
+                onChange={(e) => onChange(e, record.key)}
+              >
+                Checkbox
+              </Checkbox>
+            </Space>
+          )}
+        />
+      </Table>
+      <Modal
+        title="Title"
         open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
+        onOk={handleOk}
+        confirmLoading={confirmLoading}
+        onCancel={handleCancel}
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
-        <DialogContent>
-          <TextField
-            value={AddTitle}
-            onChange={(e) => setAddTitle(e.target.value)}
+        <div>
+          <Input
+            value={editFirstName}
+            onChange={(e) => setEditFirstName(e.target.value)}
           />
-          <TextField
-            value={AddDesc}
-            onChange={(e) => setAddDesc(e.target.value)}
+          <Input
+            value={editLastName}
+            onChange={(e) => setEditLastName(e.target.value)}
           />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleAddUser} autoFocus>
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
+        </div>
+      </Modal>
     </div>
   );
 };
