@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { DarkModeSwitch } from "react-toggle-dark-mode";
 import useDarkSide from "../hooks/useDarkSide";
-import { Switch } from "@mui/material";
 
 export default function Switcher() {
   const [colorTheme, setTheme] = useDarkSide();
@@ -10,7 +9,7 @@ export default function Switcher() {
     setTheme(colorTheme);
     setDarkSide(checked);
     };
-    // const defaultProperties = {
+    const defaultProperties = {
       dark: {
         circle: {
           r: 7,
