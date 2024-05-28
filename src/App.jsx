@@ -1,75 +1,41 @@
-import { useLocale } from "antd/es/locale";
-import axios from "axios";
-import React, {
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useState,
-} from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import dast from "./img/DastKatiQalama.png";
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
-import "./App.css";
+import React from "react";
 
-// import required modules
-import { Pagination, Navigation  } from "swiper/modules";
+import Box from "@mui/material/Box";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import { useTranslation } from "react-i18next";
 const App = () => {
-  const [cnt, setCnt] = useState(0);
-  let api = "https://64f80aa0824680fd217f0e00.mockapi.io/api/card/ForBOTs";
-  const [data, setData] = useState([]);
-  const [switcher, setSwitcher] = useState(false);
+  const [age, setAge] = React.useState("");
 
-  const getData = async () => {
-    try {
-      const { data } = await axios.get(api);
-      setData(data);
-    } catch (error) {
-      console.error(error);
-    }
+  const handleChange = (event) => {
+    setAge(event.target.value);
+    i18n.changeLanguage(event.target.value);
   };
+  const { t, i18n } = useTranslation();
 
-  useEffect(() => {
-    if (switcher) {
-      getData();
-    }
-    return setSwitcher(true);
-  }, [switcher]);
-
+  const active = localStorage.getItem("i18nextLng");
   return (
     <div>
-      <Swiper
-        pagination={true}
-        navigation={true}
-        modules={[Pagination, Navigation]}
-        className="mySwiper"
-      >
-        <SwiperSlide>
-          <div className="h-100 w-100">
-            <img src={dast} alt="" />
-          </div>{" "}
-          Slide 1
-        </SwiperSlide>
-        <SwiperSlide>Slide 2</SwiperSlide>
-        <SwiperSlide>Slide 3</SwiperSlide>
-        <SwiperSlide>Slide 4</SwiperSlide>
-        <SwiperSlide>Slide 5</SwiperSlide>
-        <SwiperSlide>Slide 6</SwiperSlide>
-        <SwiperSlide>Slide 7</SwiperSlide>
-        <SwiperSlide>Slide 8</SwiperSlide>
-        <SwiperSlide>Slide 9</SwiperSlide>
-      </Swiper>
-      {data.map((e) => {
-        return (
-          <div className="flex gap-5" key={e.id}>
-            <p>{e.desc}</p>
-            <p>{e.name}</p>
-          </div>
-        );
-      })}
+      <Box sx={{ minWidth: 120 }}>
+        <FormControl fullWidth>
+          <InputLabel id="demo-simple-select-label">Age</InputLabel>
+          <Select
+            labelId="demo-simple-select-label"
+            id="demo-simple-select"
+            value={age}
+            label="Age"
+            onChange={handleChange}
+          >
+            <MenuItem value={"en"}>English</MenuItem>
+            <MenuItem value={"ru"}>Russian</MenuItem>
+            <MenuItem value={"tj"}>Tajik</MenuItem>
+          </Select>
+        </FormControl>
+        <Box>{t("text1")}</Box>
+        <p>{t("nav.home")}</p>
+      </Box>
     </div>
   );
 };
