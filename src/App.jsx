@@ -1,41 +1,34 @@
 import React from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import Layout from "./Layout/Layout";
+import Home from "./pages/home/Home";
+import Contact from "./pages/contact/Contact";
+import ContactById from "./pages/contactById/ContactById";
 
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import { useTranslation } from "react-i18next";
 const App = () => {
-  const [age, setAge] = React.useState("");
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-    i18n.changeLanguage(event.target.value);
-  };
-  const { t, i18n } = useTranslation();
-
-  const active = localStorage.getItem("i18nextLng");
+  const a = createBrowserRouter([
+    {
+      path: "/",
+      element: <Layout />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        },
+        {
+          path: "/contact",
+          element: <Contact />,
+        },
+        {
+          path: "/contact/user/:id",
+          element: <ContactById />,
+        },
+      ],
+    },
+  ]);
   return (
     <div>
-      <Box sx={{ minWidth: 120 }}>
-        <FormControl fullWidth>
-          <InputLabel id="demo-simple-select-label">Age</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            id="demo-simple-select"
-            value={age}
-            label="Age"
-            onChange={handleChange}
-          >
-            <MenuItem value={"en"}>English</MenuItem>
-            <MenuItem value={"ru"}>Russian</MenuItem>
-            <MenuItem value={"tj"}>Tajik</MenuItem>
-          </Select>
-        </FormControl>
-        <Box>{t("text1")}</Box>
-        <p>{t("nav.home")}</p>
-      </Box>
+      <RouterProvider router={a} />
     </div>
   );
 };
