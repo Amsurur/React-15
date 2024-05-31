@@ -31,7 +31,8 @@ const ContactById = () => {
   ];
   return (
     <div>
-      {arr
+          {
+              arr
         .filter((e) => e.id == id)
         .map((e) => {
           return (
