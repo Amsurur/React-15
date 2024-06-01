@@ -4,10 +4,12 @@ import App from "./App.jsx";
 import "./index.css";
 import { ThemeProvider } from "@material-tailwind/react";
 import "./i18next.js";
+import { Toaster } from "react-hot-toast";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <ThemeProvider>
       <App />
+      <Toaster />
     </ThemeProvider>
   </React.StrictMode>
 );
