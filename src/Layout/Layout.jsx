@@ -7,7 +7,6 @@ const Layout = () => {
       <nav>
         <ul className="flex gap-5">
           <Link to="/">Home</Link>
-          <Link to="/contact">Contact</Link>
         </ul>
       </nav>
       <Outlet />
